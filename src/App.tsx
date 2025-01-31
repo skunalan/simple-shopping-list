@@ -158,7 +158,7 @@ function App() {
                   <td>
                     <Button
                       variant="danger"
-                      onClick={(e) => {
+                      onClick={() => {
                         removeProduct(product.id);
                       }}
                     >
