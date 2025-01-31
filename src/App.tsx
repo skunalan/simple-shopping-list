@@ -3,6 +3,7 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import Table from "react-bootstrap/Table";
 
 interface ShopParams {
   id: number;
@@ -47,6 +48,11 @@ function App() {
   const addProduct = (event: React.FormEvent) => {
     event.preventDefault();
 
+    if (!productInput.trim() || !selectedShop || !selectedCategory) {
+      alert("Lütfen tüm alanları doldurunuz!..");
+      return;
+    }
+
     const newProduct: ProductParams = {
       id: product.length + 1,
       name: productInput,
@@ -60,6 +66,18 @@ function App() {
     setSelectedCategory("");
   };
 
+  const toggleBought = (id: number) => {
+    setProduct((prevProduct) =>
+      prevProduct.map((p) =>
+        p.id === id ? { ...p, isBought: !p.isBought } : p
+      )
+    );
+  };
+
+  const removeProduct = (id: number) => {
+    setProduct((prevProduct) => prevProduct.filter((p) => p.id !== id));
+  };
+
   return (
     <>
       <div className="container mt-5">
@@ -70,9 +88,13 @@ function App() {
           >
             Alışveriş Listesi
           </h1>
-          <Form className="mt-3">
-            <Form.Select className="mb-3">
-              <option>Market...</option>
+          <Form className="mt-3" onSubmit={addProduct}>
+            <Form.Select
+              value={selectedShop}
+              onChange={(e) => setSelectedShop(e.target.value)}
+              className="mb-3"
+            >
+              <option value="" disabled>Market...</option>
               {shop.map((shop) => (
                 <option key={shop.id} value={shop.name}>
                   {shop.name}
@@ -80,8 +102,12 @@ function App() {
               ))}
             </Form.Select>
 
-            <Form.Select className="mb-3">
-              <option>Kategori...</option>
+            <Form.Select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="mb-3"
+            >
+              <option value="" disabled>Kategori...</option>
               {category.map((category) => (
                 <option key={category.id} value={category.name}>
                   {category.name}
@@ -90,15 +116,61 @@ function App() {
             </Form.Select>
 
             <Form.Control
-              onSubmit={addProduct}
               value={productInput}
               onChange={(e) => setProductInput(e.target.value)}
               className="mb-3"
               type="text"
               placeholder="Ürün Giriniz..."
             />
-            <Button variant="primary" type="submit">Ekle</Button>
+            <Button variant="primary" type="submit">
+              Ekle
+            </Button>
           </Form>
+        </div>
+
+        <div className="mt-5">
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>Ürün</th>
+                <th>Market</th>
+                <th>Kategori</th>
+                <th>Durum</th>
+                <th>Sil?</th>
+              </tr>
+            </thead>
+            <tbody>
+              {product.map((product) => (
+                <tr
+                  key={product.id}
+                  onClick={() => toggleBought(product.id)}
+                  style={{
+                    textDecoration: product.isBought ? "line-through" : "none",
+                    backgroundColor: product.isBought ? "#d4edda" : "white",
+                    cursor: "pointer",
+                  }}
+                >
+                  <td>{product.name}</td>
+                  <td>{product.shop}</td>
+                  <td>{product.category}</td>
+                  <td>
+                    {product.isBought ? "Satın Alındı" : "Satın Alınmadı"}
+                  </td>
+                  <td>
+                    <Button
+                      variant="danger"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeProduct(product.id);
+                      }}
+                    >
+                      Sil
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
         </div>
       </div>
     </>
