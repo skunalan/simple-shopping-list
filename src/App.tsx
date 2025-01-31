@@ -40,15 +40,15 @@ const category: CategoryParams[] = [
 ];
 
 function App() {
-  const [selectedShop, setSelectedShop] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [productInput, setProductInput] = useState("");
+  const [selectedShop, setSelectedShop] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [productInput, setProductInput] = useState<string>("");
   const [product, setProduct] = useState<ProductParams[]>([]);
 
   const addProduct = (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (!productInput.trim() || !selectedShop || !selectedCategory) {
+    if (!productInput || !selectedShop || !selectedCategory) {
       alert("Lütfen tüm alanları doldurunuz!..");
       return;
     }
@@ -60,6 +60,7 @@ function App() {
       category: selectedCategory,
       isBought: false,
     };
+    console.log(newProduct.id)
     setProduct([...product, newProduct]);
     setProductInput("");
     setSelectedShop("");
