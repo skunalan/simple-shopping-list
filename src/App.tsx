@@ -146,7 +146,6 @@ function App() {
                   onClick={() => toggleBought(product.id)}
                   style={{
                     textDecoration: product.isBought ? "line-through" : "none",
-                    backgroundColor: product.isBought ? "#d4edda" : "white",
                     cursor: "pointer",
                   }}
                 >
@@ -160,7 +159,6 @@ function App() {
                     <Button
                       variant="danger"
                       onClick={(e) => {
-                        e.stopPropagation();
                         removeProduct(product.id);
                       }}
                     >
