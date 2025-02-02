@@ -96,62 +96,64 @@ function App() {
     <>
       <div className="container mt-5 d-flex justify-content-center">
         <div className="row">
-          <h1
-            className="text-center
+          <h1 style={{color: "#6B5ACD"}}
+            className="text-center display-5 fw-bolder
       "
           >
             Alışveriş Listesi
           </h1>
-          <Form className="mt-3" onSubmit={addProduct}>
-            <Form.Select
-              value={selectedShop}
-              onChange={(e) => setSelectedShop(e.target.value)}
-              className="mb-3"
-            >
-              <option value="" disabled>
-                Market...
-              </option>
-              {shop.map((shop) => (
-                <option key={shop.id} value={shop.name}>
-                  {shop.name}
-                </option>
-              ))}
-            </Form.Select>
-
-            <Form.Select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="mb-3"
-            >
-              <option value="" disabled>
-                Kategori...
-              </option>
-              {category.map((category) => (
-                <option key={category.id} value={category.name}>
-                  {category.name}
-                </option>
-              ))}
-            </Form.Select>
-            <InputGroup className="mb-3">
-              <Form.Control
-                value={productInput}
-                onChange={(e) => setProductInput(e.target.value)}
-                type="text"
-                placeholder="Ürün Giriniz..."
-              />
-              <Button
-                variant="outline-primary"
-                type="submit"
-                className="btn-lg"
+          <div className="bg-light shadow mt-4">
+            <Form className="mt-3" onSubmit={addProduct}>
+              <Form.Select
+                value={selectedShop}
+                onChange={(e) => setSelectedShop(e.target.value)}
+                className="mb-3"
               >
-                Ekle
-              </Button>
-            </InputGroup>
-          </Form>
+                <option value="" disabled>
+                  Market...
+                </option>
+                {shop.map((shop) => (
+                  <option key={shop.id} value={shop.name}>
+                    {shop.name}
+                  </option>
+                ))}
+              </Form.Select>
+
+              <Form.Select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="mb-3"
+              >
+                <option value="" disabled>
+                  Kategori...
+                </option>
+                {category.map((category) => (
+                  <option key={category.id} value={category.name}>
+                    {category.name}
+                  </option>
+                ))}
+              </Form.Select>
+              <InputGroup className="mb-3">
+                <Form.Control
+                  value={productInput}
+                  onChange={(e) => setProductInput(e.target.value)}
+                  type="text"
+                  placeholder="Ürün Giriniz..."
+                />
+                <Button
+                  variant="outline-primary"
+                  type="submit"
+                  className="btn-lg"
+                >
+                  Ekle
+                </Button>
+              </InputGroup>
+            </Form>
+          </div>
         </div>
       </div>
       <div className="container d-flex justify-content-center">
-        <div className="mt-5 w-75">
+        <div className="mt-5 w-75 text-center">
           <Table striped bordered hover>
             <thead>
               <tr>
