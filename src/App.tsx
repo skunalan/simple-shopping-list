@@ -4,7 +4,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
+import JSConfetti from "js-confetti";
 import { nanoid } from "nanoid";
+
+const jsConfetti = new JSConfetti();
 
 interface ShopParams {
   id: string;
@@ -69,11 +72,19 @@ function App() {
   };
 
   const toggleBought = (id: string) => {
-    setProduct((prevProduct) =>
-      prevProduct.map((p) =>
+    setProduct((prevProduct) => {
+      const updatedProduct = prevProduct.map((p) =>
         p.id === id ? { ...p, isBought: !p.isBought } : p
-      )
-    );
+      );
+
+      if (
+        updatedProduct.length > 0 &&
+        updatedProduct.every((p) => p.isBought)
+      ) {
+        jsConfetti.addConfetti();
+      }
+      return updatedProduct;
+    });
   };
 
   const removeProduct = (id: string) => {
