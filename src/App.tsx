@@ -4,19 +4,20 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
+import { nanoid } from "nanoid";
 
 interface ShopParams {
-  id: number;
+  id: string;
   name: string;
 }
 
 interface CategoryParams {
-  id: number;
+  id: string;
   name: string;
 }
 
 interface ProductParams {
-  id: number;
+  id: string;
   name: string;
   shop: string;
   category: string;
@@ -24,19 +25,19 @@ interface ProductParams {
 }
 
 const shop: ShopParams[] = [
-  { id: 1, name: "Migros" },
-  { id: 2, name: "Şok" },
-  { id: 3, name: "Çağdaş" },
-  { id: 4, name: "Teknosa" },
-  { id: 5, name: "Mediamarkt" },
+  { id: "1", name: "Migros" },
+  { id: "2", name: "Şok" },
+  { id: "3", name: "Çağdaş" },
+  { id: "4", name: "Teknosa" },
+  { id: "5", name: "Mediamarkt" },
 ];
 
 const category: CategoryParams[] = [
-  { id: 1, name: "Şarküteri" },
-  { id: 2, name: "Bakliyat" },
-  { id: 3, name: "Kasap" },
-  { id: 4, name: "Kozmetik" },
-  { id: 5, name: "Elektronik" },
+  { id: "1", name: "Şarküteri" },
+  { id: "2", name: "Bakliyat" },
+  { id: "3", name: "Kasap" },
+  { id: "4", name: "Kozmetik" },
+  { id: "5", name: "Elektronik" },
 ];
 
 function App() {
@@ -54,20 +55,20 @@ function App() {
     }
 
     const newProduct: ProductParams = {
-      id: product.length + 1,
+      id: nanoid(),
       name: productInput,
       shop: selectedShop,
       category: selectedCategory,
       isBought: false,
     };
-    console.log(newProduct.id)
+    console.log(newProduct.id);
     setProduct([...product, newProduct]);
     setProductInput("");
     setSelectedShop("");
     setSelectedCategory("");
   };
 
-  const toggleBought = (id: number) => {
+  const toggleBought = (id: string) => {
     setProduct((prevProduct) =>
       prevProduct.map((p) =>
         p.id === id ? { ...p, isBought: !p.isBought } : p
@@ -75,7 +76,7 @@ function App() {
     );
   };
 
-  const removeProduct = (id: number) => {
+  const removeProduct = (id: string) => {
     setProduct((prevProduct) => prevProduct.filter((p) => p.id !== id));
   };
 
@@ -95,7 +96,9 @@ function App() {
               onChange={(e) => setSelectedShop(e.target.value)}
               className="mb-3"
             >
-              <option value="" disabled>Market...</option>
+              <option value="" disabled>
+                Market...
+              </option>
               {shop.map((shop) => (
                 <option key={shop.id} value={shop.name}>
                   {shop.name}
@@ -108,7 +111,9 @@ function App() {
               onChange={(e) => setSelectedCategory(e.target.value)}
               className="mb-3"
             >
-              <option value="" disabled>Kategori...</option>
+              <option value="" disabled>
+                Kategori...
+              </option>
               {category.map((category) => (
                 <option key={category.id} value={category.name}>
                   {category.name}
