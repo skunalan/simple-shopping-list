@@ -3,6 +3,7 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import InputGroup from "react-bootstrap/InputGroup";
 import Table from "react-bootstrap/Table";
 import JSConfetti from "js-confetti";
 import { nanoid } from "nanoid";
@@ -93,7 +94,7 @@ function App() {
 
   return (
     <>
-      <div className="container mt-5">
+      <div className="container mt-5 d-flex justify-content-center">
         <div className="row">
           <h1
             className="text-center
@@ -131,21 +132,26 @@ function App() {
                 </option>
               ))}
             </Form.Select>
-
-            <Form.Control
-              value={productInput}
-              onChange={(e) => setProductInput(e.target.value)}
-              className="mb-3"
-              type="text"
-              placeholder="Ürün Giriniz..."
-            />
-            <Button variant="primary" type="submit">
-              Ekle
-            </Button>
+            <InputGroup className="mb-3">
+              <Form.Control
+                value={productInput}
+                onChange={(e) => setProductInput(e.target.value)}
+                type="text"
+                placeholder="Ürün Giriniz..."
+              />
+              <Button
+                variant="outline-primary"
+                type="submit"
+                className="btn-lg"
+              >
+                Ekle
+              </Button>
+            </InputGroup>
           </Form>
         </div>
-
-        <div className="mt-5">
+      </div>
+      <div className="container d-flex justify-content-center">
+        <div className="mt-5 w-75">
           <Table striped bordered hover>
             <thead>
               <tr>
