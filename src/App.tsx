@@ -49,6 +49,8 @@ function App() {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [productInput, setProductInput] = useState<string>("");
   const [product, setProduct] = useState<ProductParams[]>([]);
+  const [filteredShop, setFilteredShop] = useState<string>("");
+  const [filteredCategory, setFilteredCategory] = useState<string>("");
 
   const addProduct = (event: React.FormEvent) => {
     event.preventDefault();
@@ -58,14 +60,25 @@ function App() {
       return;
     }
 
+    const selectedShopItem = shop.find((shop) => shop.id === selectedShop);
+    const selectedCategoryItem = category.find(
+      (category) => category.id === selectedCategory
+    );
+
+    if (!selectedShopItem || !selectedCategoryItem) {
+      alert(
+        "Geçersiz market ya da kategori seçimi yaptınız. Lütfen kontrol ediniz!.."
+      );
+      return;
+    }
+
     const newProduct: ProductParams = {
       id: nanoid(),
       name: productInput,
-      shop: selectedShop,
-      category: selectedCategory,
+      shop: selectedShopItem.name,
+      category: selectedCategoryItem.name,
       isBought: false,
     };
-    console.log(newProduct.id);
     setProduct([...product, newProduct]);
     setProductInput("");
     setSelectedShop("");
@@ -96,7 +109,8 @@ function App() {
     <>
       <div className="container mt-5 d-flex justify-content-center">
         <div className="row">
-          <h1 style={{color: "#6B5ACD"}}
+          <h1
+            style={{ color: "#6B5ACD" }}
             className="text-center display-5 fw-bolder
       "
           >
@@ -113,7 +127,7 @@ function App() {
                   Market...
                 </option>
                 {shop.map((shop) => (
-                  <option key={shop.id} value={shop.name}>
+                  <option key={shop.id} value={shop.id}>
                     {shop.name}
                   </option>
                 ))}
@@ -128,7 +142,7 @@ function App() {
                   Kategori...
                 </option>
                 {category.map((category) => (
-                  <option key={category.id} value={category.name}>
+                  <option key={category.id} value={category.id}>
                     {category.name}
                   </option>
                 ))}
@@ -154,9 +168,39 @@ function App() {
       </div>
       <div className="container d-flex justify-content-center">
         <div className="mt-5 w-75 text-center">
-          <Table striped bordered hover>
+          <div className="d-inline-flex gap-3 mb-3">
+            <Form.Select
+              value={filteredShop}
+              onChange={(e) => setFilteredShop(e.target.value)}
+            >
+              <option value="" >
+                Tüm Marketler
+              </option>
+              {shop.map((shop) => (
+                <option key={shop.id} value={shop.id}>
+                  {shop.name}
+                </option>
+              ))}
+            </Form.Select>
+            
+            <Form.Select
+              value={filteredCategory}
+              onChange={(e) => setFilteredCategory(e.target.value)}
+            >
+              <option value="">
+                Tüm Kategoriler
+              </option>
+              {category.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </Form.Select>
+          </div>
+          <Table striped bordered hover style={{ border: "2px solid #6B5ACD" }}>
             <thead>
               <tr>
+                <th>Sıra</th>
                 <th>Ürün</th>
                 <th>Market</th>
                 <th>Kategori</th>
@@ -165,7 +209,7 @@ function App() {
               </tr>
             </thead>
             <tbody>
-              {product.map((product) => (
+            {product.map((product, index) => (
                 <tr
                   key={product.id}
                   onClick={() => toggleBought(product.id)}
@@ -174,6 +218,7 @@ function App() {
                     cursor: "pointer",
                   }}
                 >
+                  <td>{index + 1}</td>
                   <td>{product.name}</td>
                   <td>{product.shop}</td>
                   <td>{product.category}</td>
@@ -181,17 +226,17 @@ function App() {
                     {product.isBought ? "Satın Alındı" : "Satın Alınmadı"}
                   </td>
                   <td>
-                    <Button
-                      variant="danger"
-                      onClick={() => {
-                        removeProduct(product.id);
-                      }}
-                    >
-                      Sil
-                    </Button>
-                  </td>
-                </tr>
-              ))}
+                      <Button
+                        variant="danger"
+                        onClick={() => {
+                          removeProduct(product.id);
+                        }}
+                      >
+                        Sil
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </Table>
         </div>
