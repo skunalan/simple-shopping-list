@@ -101,6 +101,19 @@ function App() {
     });
   };
 
+  const filteredProducts = product.filter((item) => {
+    const selectedShopItem = shop.find((s) => s.id === filteredShop);
+    const selectedCategoryItem = category.find(
+      (c) => c.id === filteredCategory
+    );
+
+    const matchingShop = !filteredShop || item.shop === selectedShopItem?.name;
+    const matchingCategory =
+      !filteredCategory || item.category === selectedCategoryItem?.name;
+
+    return matchingShop && matchingCategory;
+  });
+
   const removeProduct = (id: string) => {
     setProduct((prevProduct) => prevProduct.filter((p) => p.id !== id));
   };
@@ -119,6 +132,7 @@ function App() {
           <div className="bg-light shadow mt-4">
             <Form className="mt-3" onSubmit={addProduct}>
               <Form.Select
+                style={{ cursor: "pointer" }}
                 value={selectedShop}
                 onChange={(e) => setSelectedShop(e.target.value)}
                 className="mb-3"
@@ -134,6 +148,7 @@ function App() {
               </Form.Select>
 
               <Form.Select
+                style={{ cursor: "pointer" }}
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
                 className="mb-3"
@@ -168,28 +183,26 @@ function App() {
       </div>
       <div className="container d-flex justify-content-center">
         <div className="mt-5 w-75 text-center">
-          <div className="d-inline-flex gap-3 mb-3">
+          <div className="d-flex gap-3 mb-3">
             <Form.Select
+              style={{ cursor: "pointer" }}
               value={filteredShop}
               onChange={(e) => setFilteredShop(e.target.value)}
             >
-              <option value="" >
-                Tüm Marketler
-              </option>
+              <option value="">Tüm Marketler</option>
               {shop.map((shop) => (
                 <option key={shop.id} value={shop.id}>
                   {shop.name}
                 </option>
               ))}
             </Form.Select>
-            
+
             <Form.Select
+              style={{ cursor: "pointer" }}
               value={filteredCategory}
               onChange={(e) => setFilteredCategory(e.target.value)}
             >
-              <option value="">
-                Tüm Kategoriler
-              </option>
+              <option value="">Tüm Kategoriler</option>
               {category.map((category) => (
                 <option key={category.id} value={category.id}>
                   {category.name}
@@ -209,7 +222,7 @@ function App() {
               </tr>
             </thead>
             <tbody>
-            {product.map((product, index) => (
+              {filteredProducts.map((product, index) => (
                 <tr
                   key={product.id}
                   onClick={() => toggleBought(product.id)}
@@ -226,17 +239,17 @@ function App() {
                     {product.isBought ? "Satın Alındı" : "Satın Alınmadı"}
                   </td>
                   <td>
-                      <Button
-                        variant="danger"
-                        onClick={() => {
-                          removeProduct(product.id);
-                        }}
-                      >
-                        Sil
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
+                    <Button
+                      variant="danger"
+                      onClick={() => {
+                        removeProduct(product.id);
+                      }}
+                    >
+                      Sil
+                    </Button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </Table>
         </div>
